@@ -114,7 +114,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $this->first_name = trim($this->first_name);
                 $this->last_name = trim($this->last_name);
 
-                if (strLen($this->first_name) < 2 or strLen($this->middleName) < 2 or strLen($this->last_name) < 2 ) {
+                if (strLen($this->first_name) < 2 or strLen($this->last_name) < 2 ) {
                     return ["bool" => false, "message" => "Name Should Not Be less Than Two Characters"];
                 } else {
                     return ["bool" => true];

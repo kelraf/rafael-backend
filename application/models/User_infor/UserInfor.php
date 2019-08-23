@@ -74,7 +74,12 @@
                 if(!$vnames["bool"]) {
                     return $vnames;
                 } else {
-                    return ["bool" => true, "message" => "Successfully V"];
+                    $data = [];
+                    $data["first_name"] = $this->first_name;
+                    $data["last_name"] = $this->last_name;
+                    $this->db->where(["id" => $this->id]);
+                    $this->db->update("user", $data);
+                    return ["bool" => true, "message" => "Successfully Updated Names"];
                 }
             }
             
