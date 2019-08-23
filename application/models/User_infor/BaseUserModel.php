@@ -124,6 +124,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
             
         }
 
+        public function vPhone() {
+            $this->phone = filter_var($this->phone, FILTER_SANITIZE_STRING);
+            $this->phone = trim($this->phone);
+            if(empty($this->phone)) {
+                return ["bool" => false, "message" => "Phone Number Required"];
+            } else if (strlen($this->phone) < 10) {
+                return ["bool" => false, "message" => "Invalid Phone Number"];
+            } else {
+                return ["bool" => true];
+            }
+        }
+
     }
 
 ?>

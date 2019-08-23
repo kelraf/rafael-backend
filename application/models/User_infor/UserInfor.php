@@ -84,6 +84,23 @@
             }
             
         }
+
+        public function updatePhone() {
+            $check_id = $this->idExists();
+
+            if(!$check_id["bool"]) {
+                return $check_id;
+            } else {
+                $vphone = $this->vPhone();
+                if(!$vphone["bool"]) {
+                    return $vphone;
+                } else {
+                    $this->db->where(["id" => $this->id]);
+                    $this->db->update("user", ["phone" => $this->phone]);
+                    return ["bool" => true, "message" => "Successfully Updated Your Phone Number"];
+                }
+            }
+        }
     }
 
 ?>

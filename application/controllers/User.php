@@ -65,6 +65,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
             echo json_encode($done);
 
         }
+
+        public function updatePhone() {
+            $data = json_decode(file_get_contents("php://input"), true);
+
+            $this->userinfor->id = $data["id"];
+            $this->userinfor->phone = $data["phone"];
+            $done = $this->userinfor->updatePhone();
+
+            echo json_encode($done);
+        }
     }
 
 
