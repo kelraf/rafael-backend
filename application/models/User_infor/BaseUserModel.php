@@ -51,8 +51,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 return ["bool" => false, "message" => "Invalid Email"];
             } else {
                 if($checkexists) {
-                    $data = $this->db->get_where("user", ["email" => $this->email])->result();
-                    if(!data) {
+                    $data = $this->db->get_where("user", ["email" => $this->email])->row_array();
+                    if(!$data) {
                         return ["bool" => false, "message" => "The Email Provided Does Not Exist"];
                     } else { 
                         return ["bool" => true, "user" => $data];
