@@ -1,7 +1,7 @@
 <?php
-// defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-    class Base extends CI_Model {
+    class BaseUserModel extends CI_Model {
 
         public $id;
         public $current_passw;
@@ -19,14 +19,14 @@
             $this->load->database();
         }
 
-        public function idExists($data=false) {
+        protected function idExists($data=false) {
 
             $this->id = filter_var($this->id, FILTER_SANITIZE_STRING);
 
             if(empty($this->id)) {
                 return ["bool" => false, "message" => "Oparation Imposible!! Your Id is Required"];
             } else {
-                $query = $this->db->get_where("user", ["id" => $this->id]);
+                $query = $this->db->get_where("user", ["id" => $this->id])->result();
 
                 if(!$query) {
                     return ["bool" => false, "message" => "No User With Such Id Is Available"];
@@ -40,19 +40,31 @@
             }
         }
 
-        public function vMail() {
+        protected function vMail($checkexists = false) {
 
             // Sanitize email
             $this->email = filter_var($this->email, FILTER_SANITIZE_EMAIL);
-            if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+
+            if(empty($this->email)) {
+                return ["bool" => false, "message" => "Email is required"];
+            } else if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
                 return ["bool" => false, "message" => "Invalid Email"];
             } else {
-                return ["bool" => true];
+                if($checkexists) {
+                    $data = $this->db->get_where("user", ["email" => $this->email])->result();
+                    if(!data) {
+                        return ["bool" => false, "message" => "The Email Provided Does Not Exist"];
+                    } else { 
+                        return ["bool" => true, "user" => $data];
+                    }
+                } else {
+                    return ["bool" => true];
+                }
             }
 
         }
 
-        public function vPasswords($compareExisting=false) {
+        protected function vPasswords($compareExisting=false) {
 
             if (empty($this->passw)) {
                 return ["bool" => false, "message" => "Password Field Required"];
@@ -85,6 +97,7 @@
                     return ["bool" => true];
                 }
             }
+
         }
 
     }
