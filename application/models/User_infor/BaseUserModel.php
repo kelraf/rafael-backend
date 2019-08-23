@@ -26,7 +26,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             if(empty($this->id)) {
                 return ["bool" => false, "message" => "Oparation Imposible!! Your Id is Required"];
             } else {
-                $query = $this->db->get_where("user", ["id" => $this->id])->result();
+                $query = $this->db->get_where("user", ["id" => $this->id])->row_array();
 
                 if(!$query) {
                     return ["bool" => false, "message" => "No User With Such Id Is Available"];
@@ -76,14 +76,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 return ["bool" => false, "message" => "Your Passwords Must Match"];
             } else {
                 if ($compareExisting) {
-
                     $data = $this->idExists(true);
                     if ($data["bool"]) {
                         $user = $data["user"];
 
                         if (!password_verify($this->current_passw, $user["passw"])) {
                             return ["bool" => false, "message" => "Current Password is Invalid"];
-                        } else {
+                        } else { 
                             $this->passw = password_hash($this->passw, PASSWORD_DEFAULT);
                             $this->conf_passw = password_hash($this->conf_passw, PASSWORD_DEFAULT);
                             return ["bool" => true];
@@ -97,7 +96,44 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     return ["bool" => true];
                 }
             }
+        }
 
+        public function vNames() {
+
+            if (empty($this->first_name)) {
+                return ["bool" => false, "message" => "First Name Is Required"];
+            } elseif (empty($this->last_name)) {
+                return ["bool" => false, "message" => "Last Name Is Required"];
+            } else {
+
+                // Sanitize The Names
+                $this->first_name = filter_var($this->first_name, FILTER_SANITIZE_STRING);
+                $this->last_name = filter_var($this->last_name, FILTER_SANITIZE_STRING);
+
+                // Remove Any White  Spaces
+                $this->first_name = trim($this->first_name);
+                $this->last_name = trim($this->last_name);
+
+                if (strLen($this->first_name) < 2 or strLen($this->last_name) < 2 ) {
+                    return ["bool" => false, "message" => "Name Should Not Be less Than Two Characters"];
+                } else {
+                    return ["bool" => true];
+                }
+
+            }
+            
+        }
+
+        public function vPhone() {
+            $this->phone = filter_var($this->phone, FILTER_SANITIZE_STRING);
+            $this->phone = trim($this->phone);
+            if(empty($this->phone)) {
+                return ["bool" => false, "message" => "Phone Number Required"];
+            } else if (strlen($this->phone) < 10) {
+                return ["bool" => false, "message" => "Invalid Phone Number"];
+            } else {
+                return ["bool" => true];
+            }
         }
 
     }
