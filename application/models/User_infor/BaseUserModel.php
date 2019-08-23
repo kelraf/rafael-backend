@@ -98,6 +98,32 @@ defined('BASEPATH') or exit('No direct script access allowed');
             }
         }
 
+        public function vNames() {
+
+            if (empty($this->first_name)) {
+                return ["bool" => false, "message" => "First Name Is Required"];
+            } elseif (empty($this->last_name)) {
+                return ["bool" => false, "message" => "Last Name Is Required"];
+            } else {
+
+                // Sanitize The Names
+                $this->first_name = filter_var($this->first_name, FILTER_SANITIZE_STRING);
+                $this->last_name = filter_var($this->last_name, FILTER_SANITIZE_STRING);
+
+                // Remove Any White  Spaces
+                $this->first_name = trim($this->first_name);
+                $this->last_name = trim($this->last_name);
+
+                if (strLen($this->first_name) < 2 or strLen($this->middleName) < 2 or strLen($this->last_name) < 2 ) {
+                    return ["bool" => false, "message" => "Name Should Not Be less Than Two Characters"];
+                } else {
+                    return ["bool" => true];
+                }
+
+            }
+            
+        }
+
     }
 
 ?>
