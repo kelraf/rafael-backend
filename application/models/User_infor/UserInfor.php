@@ -65,7 +65,20 @@
             }
         }
 
-        
+        public function updateNames() {
+            $check_id = $this->idExists();
+            if(!$check_id["bool"]) {
+                return $check_id;
+            } else {
+                $vnames = $this->vNames();
+                if(!$vnames["bool"]) {
+                    return $vnames;
+                } else {
+                    return ["bool" => true, "message" => "Successfully V"];
+                }
+            }
+            
+        }
     }
 
 ?>

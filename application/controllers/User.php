@@ -53,6 +53,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
             echo json_encode($done);
         }
+
+        public function updateNames() {
+            $data = json_decode(file_get_contents("php://input"), true);
+
+            $this->userinfor->id = $data["id"];
+            $this->userinfor->first_name = $data["first_name"];
+            $this->userinfor->last_name = $data["last_name"];
+            $done = $this->userinfor->updateNames();
+
+            echo json_encode($done);
+
+        }
     }
 
 
