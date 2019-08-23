@@ -26,7 +26,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             if(empty($this->id)) {
                 return ["bool" => false, "message" => "Oparation Imposible!! Your Id is Required"];
             } else {
-                $query = $this->db->get_where("user", ["id" => $this->id])->result();
+                $query = $this->db->get_where("user", ["id" => $this->id])->row_array();
 
                 if(!$query) {
                     return ["bool" => false, "message" => "No User With Such Id Is Available"];
@@ -76,14 +76,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 return ["bool" => false, "message" => "Your Passwords Must Match"];
             } else {
                 if ($compareExisting) {
-
                     $data = $this->idExists(true);
                     if ($data["bool"]) {
                         $user = $data["user"];
 
                         if (!password_verify($this->current_passw, $user["passw"])) {
                             return ["bool" => false, "message" => "Current Password is Invalid"];
-                        } else {
+                        } else { 
                             $this->passw = password_hash($this->passw, PASSWORD_DEFAULT);
                             $this->conf_passw = password_hash($this->conf_passw, PASSWORD_DEFAULT);
                             return ["bool" => true];
@@ -97,7 +96,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     return ["bool" => true];
                 }
             }
-
         }
 
     }

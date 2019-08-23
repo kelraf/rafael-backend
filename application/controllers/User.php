@@ -29,6 +29,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
             echo json_encode($done);
         }
+
+        public function updatePass() {
+            $data = json_decode(file_get_contents("php://input"), true);
+
+            $this->userinfor->id = $data["id"];
+            $this->userinfor->current_passw = $data["current_password"];
+            $this->userinfor->passw = $data["password"];
+            $this->userinfor->conf_passw = $data["confirm_password"];
+
+            $done = $this->userinfor->updatePass();
+
+            echo json_encode($done);
+
+        }
     }
 
 
