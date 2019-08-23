@@ -48,6 +48,22 @@
                 return ["bool" => true, "message" => "Successfully Updated Password"];
             }
         }
+
+        public function updateMail() {
+            $idexists = $this->idExists();
+            if(!$idexists["bool"]) {
+                return $idexists;
+            } else {
+                $vmail = $this->vMail();
+                if(!$vmail["bool"]) {
+                    return $vmail;
+                } else {
+                    $this->db->where(["id" => $this->id]);
+                    $this->db->update("user", ["email" => $this->email]);
+                    return ["bool" => true, "message" => "Successfully Updated Your Email"];
+                }
+            }
+        }
     }
 
 ?>
