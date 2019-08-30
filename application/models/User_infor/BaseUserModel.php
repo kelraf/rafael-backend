@@ -50,7 +50,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             } else if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
                 return ["bool" => false, "message" => "Invalid Email"];
             } else {
-                if($checkexists) {
+                if($checkexists and !$exeption) {
                     $data = $this->db->get_where("user", ["email" => $this->email])->row_array();
                     if(!$data) {
                         return ["bool" => true, "exists" => false, "message" => "The Email Provided Does Not Exist"];
@@ -60,12 +60,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 } else if ($checkexists and $exeption) {
                     $this->db->where("id !=", $this->id);
                     $this->db->where("email", $this->email);
+                    // $sql = "SELECT * FROM user WHERE email = $this->email AND id <> $this->id";
                     $data = $this->db->get("user")->row_array();
                     // $data = $this->db->get_where("user", ["email" => $this->email, "id !=" => $this->id])->row_array();
                     if(!$data) {
                         return ["bool" => true, "exists" => false, "message" => "The Email Provided Does Not Exist"];
                     } else { 
-                        return ["bool" => true, "exists" => true, "user" => $data, "message" => "The Email Provided Already Exists"];
+                        return ["bool" => true, "exists" => true, "user" => $data, "message" => "The Email Provided Already Exists Two"];
                     }
                 } else {
                     return ["bool" => true];
