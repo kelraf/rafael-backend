@@ -40,7 +40,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             }
         }
 
-        protected function vMail($checkexists = false) {
+        protected function vMail($checkexists = false, $exeption=false) {
 
             // Sanitize email
             $this->email = filter_var($this->email, FILTER_SANITIZE_EMAIL);
@@ -53,9 +53,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 if($checkexists) {
                     $data = $this->db->get_where("user", ["email" => $this->email])->row_array();
                     if(!$data) {
-                        return ["bool" => false, "message" => "The Email Provided Does Not Exist"];
+                        return ["bool" => true, "exists" => false, "message" => "The Email Provided Does Not Exist"];
                     } else { 
-                        return ["bool" => true, "user" => $data];
+                        return ["bool" => true, "exists" => true, "user" => $data, "message" => "The Email Provided Already Exists"];
+                    }
+                } else if ($checkexists and $exeption) {
+                    $this->db->where("id !=", $this->id);
+                    $this->db->where("email", $this->email);
+                    $data = $this->db->get("user")->row_array();
+                    // $data = $this->db->get_where("user", ["email" => $this->email, "id !=" => $this->id])->row_array();
+                    if(!$data) {
+                        return ["bool" => true, "exists" => false, "message" => "The Email Provided Does Not Exist"];
+                    } else { 
+                        return ["bool" => true, "exists" => true, "user" => $data, "message" => "The Email Provided Already Exists"];
                     }
                 } else {
                     return ["bool" => true];

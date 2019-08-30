@@ -10,8 +10,12 @@
         }
 
         public function register() {
-            $vmail = $this->vMail();
-            if(!$vmail["bool"]) {
+            $vmail = $this->vMail(true);
+            if($vmail["bool"] and $vmail["exists"]) {
+                unset($vmail["user"]);
+                unset($vmail["exists"]);
+                return $vmail;
+            } else if (!$vmail["bool"]) {
                 return $vmail;
             } else {
                 $vpasswords = $this->vPasswords();
@@ -54,8 +58,12 @@
             if(!$idexists["bool"]) {
                 return $idexists;
             } else {
-                $vmail = $this->vMail();
-                if(!$vmail["bool"]) {
+                $vmail = $this->vMail(true, true);
+                if($vmail["bool"] and $vmail["exists"]) {
+                    // unset($vmail["user"]);
+                    unset($vmail["exists"]);
+                    return $vmail;
+                } elseif (!$vmail["bool"]) {
                     return $vmail;
                 } else {
                     $this->db->where(["id" => $this->id]);
